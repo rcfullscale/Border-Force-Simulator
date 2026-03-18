@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class BoatInspector : MonoBehaviour
 {
-    public float detectionRange = 5f;   // How close you need to be
+    public float detectionRange = 5f;
 
     private BoatData nearbyBoat = null;
     private bool showInfo = false;
@@ -24,7 +24,7 @@ public class BoatInspector : MonoBehaviour
             }
         }
 
-        // Toggle info display on I press
+        // Toggle info on I
         if (Keyboard.current.iKey.wasPressedThisFrame)
         {
             if (nearbyBoat != null)
@@ -33,27 +33,32 @@ public class BoatInspector : MonoBehaviour
                 showInfo = false;
         }
 
-        // Hide info if you move out of range
+        // Dissipate nearest boat on K
+        if (Keyboard.current.kKey.wasPressedThisFrame && nearbyBoat != null)
+        {
+            BoatDissipate bd = nearbyBoat.GetComponent<BoatDissipate>();
+            if (bd != null) bd.Dissipate();
+            showInfo = false;
+            nearbyBoat = null;
+        }
+
         if (nearbyBoat == null)
             showInfo = false;
     }
 
     void OnGUI()
     {
-        // Prompt to press I when in range
         if (nearbyBoat != null && !showInfo)
         {
             GUIStyle promptStyle = new GUIStyle();
             promptStyle.fontSize = 18;
             promptStyle.normal.textColor = Color.yellow;
             promptStyle.alignment = TextAnchor.MiddleCenter;
-            GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height - 80, 300, 30), "Press I to inspect vessel", promptStyle);
+            GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height - 80, 300, 30), "Press I to inspect  |  Press K to destroy", promptStyle);
         }
 
-        // Show boat info panel at bottom of screen
         if (showInfo && nearbyBoat != null)
         {
-            // Background box
             GUI.color = new Color(0f, 0f, 0f, 0.75f);
             GUI.DrawTexture(new Rect(0, Screen.height - 150, Screen.width, 150), Texture2D.whiteTexture);
             GUI.color = Color.white;
