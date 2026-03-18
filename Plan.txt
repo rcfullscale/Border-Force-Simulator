@@ -21,3 +21,6 @@ below 10% reputation certain to get found out about the bribe
 crupption:
 cartel offers if you let a spefic boat through you get paid $100
 
+
+confirmation system:
+when you intergrate it shows a ship report and if its diffrent to what they report then you have to deal with them
