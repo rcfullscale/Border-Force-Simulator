@@ -48,11 +48,13 @@ public class BoatInspector : MonoBehaviour
             if (nearbyBoat.IsVisaValid())
             {
                 successfulIntegrations++;
+                PlayerStats.Instance?.RecordCorrectClear();
                 ShowFeedback("CORRECT - Valid VISA, vessel cleared", true);
             }
             else
             {
                 failures++;
+                PlayerStats.Instance?.RecordWrongClear();
                 ShowFeedback("FAILURE - Invalid VISA, should have destroyed", false);
             }
 
@@ -67,11 +69,13 @@ public class BoatInspector : MonoBehaviour
             if (!nearbyBoat.IsVisaValid())
             {
                 successfulIntegrations++;
+                PlayerStats.Instance?.RecordCorrectDestroy();
                 ShowFeedback("CORRECT - Invalid VISA, vessel destroyed", true);
             }
             else
             {
                 failures++;
+                PlayerStats.Instance?.RecordWrongDestroy();
                 ShowFeedback("FAILURE - Valid VISA, should have cleared", false);
             }
 
