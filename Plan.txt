@@ -5,14 +5,19 @@ upgrade to 200 knots $100
 upgrade to 250 knots $110
 upgrade to 300 knots $120
 upgrade to 330 knots $130
-
+radar range?
+view size
 
 reputation system:
-+1% reptuatuion per boat corrected sucessfully
+start at 30%
++1% reptuatuion per boat identfied and delt with sucessfully
 -50% reptuatuion for being found for takeing a bribe
 below 10% reputation certain to get found out about the bribe
 10-25% reptuatuion is a 50% chance you get found
 25-50% reptuatuion is a 25% chance you get found
 50-75% reptuatuion is a 15% chance you get found
 75-100% reptuatuion is a 10% chance you get found
+
+crupption:
+cartel offers if you let a spefic boat through you get paid $100
 
