@@ -1,0 +1,18 @@
+money system:
+$0.10 per percentage of reptuatuion for each sucessful boat intergrateion
+plane starts with a max speed of 150knots
+upgrade to 200 knots $100
+upgrade to 250 knots $110
+upgrade to 300 knots $120
+upgrade to 330 knots $130
+
+
+reputation system:
++1% reptuatuion per boat corrected sucessfully
+-50% reptuatuion for being found for takeing a bribe
+below 10% reputation certain to get found out about the bribe
+10-25% reptuatuion is a 50% chance you get found
+25-50% reptuatuion is a 25% chance you get found
+50-75% reptuatuion is a 15% chance you get found
+75-100% reptuatuion is a 10% chance you get found
+
