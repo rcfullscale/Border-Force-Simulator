@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 
 public class BoatRandomMovement2D : MonoBehaviour
 {
+    private BoatData boatData;
     [Header("Movement Settings")]
     public float maxSpeed = 1.8f;              // Top speed
     public float acceleration = 0.6f;          // How quickly it reaches max speed
@@ -39,16 +42,22 @@ public class BoatRandomMovement2D : MonoBehaviour
 
     void Start()
     {
+        boatData = GetComponent<BoatData>();
         _startPosition = transform.position;
         _driftOffset = Random.Range(0f, Mathf.PI * 2f);
         _currentAngle = transform.eulerAngles.z;
         _idleDriftAngle = Random.Range(0f, 360f);
-
         PickNewWaypoint();
+        
     }
 
     void Update()
     {
+        if (boatData != null && boatData.isDead)
+        {
+            maxSpeed = 0f;
+            return;
+        }
         if (_isIdle)
             HandleIdle();
         else

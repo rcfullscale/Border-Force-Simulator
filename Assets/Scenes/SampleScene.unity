@@ -646,6 +646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatInspector
   detectionRange: 10
+  destroyedSprite: {fileID: 76500279379014391, guid: b7f355cfedc42bb4a8c5b047ad59121b, type: 3}
 --- !u!1 &803827261
 GameObject:
   m_ObjectHideFlags: 0
@@ -778,6 +779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb7316f75e109854484cdb1994b26004, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoatData
+  isDead: 0
   vesselName: 
   vesselType: 
   cargo: 

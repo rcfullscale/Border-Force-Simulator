@@ -4,10 +4,18 @@ using UnityEngine.InputSystem;
 public class BoatInspector : MonoBehaviour
 {
     public float detectionRange = 5f;
-    public Sprite destroyedSprite; // Assign a sinking/wreck sprite in Inspector
+    public Sprite destroyedSprite;
 
     private BoatData nearbyBoat = null;
     private bool showInfo = false;
+
+    private int successfulIntegrations = 0;
+    private int failures = 0;
+
+    // Feedback message shown briefly after a decision
+    private string feedbackMessage = "";
+    private float feedbackTimer = 0f;
+    private bool feedbackCorrect = true;
 
     void Update()
     {
@@ -32,36 +40,97 @@ public class BoatInspector : MonoBehaviour
                 showInfo = false;
         }
 
+        // H = let through (valid VISA)
+        if (Keyboard.current.hKey.wasPressedThisFrame && nearbyBoat != null)
+        {
+            if (nearbyBoat.IsVisaValid())
+            {
+                successfulIntegrations++;
+                ShowFeedback("CORRECT - Valid VISA, vessel cleared", true);
+            }
+            else
+            {
+                failures++;
+                ShowFeedback("FAILURE - Invalid VISA, should have destroyed", false);
+            }
+
+            showInfo = false;
+            nearbyBoat = null;
+        }
+
+        // K = destroy (invalid VISA)
         if (Keyboard.current.kKey.wasPressedThisFrame && nearbyBoat != null)
         {
-            // Swap sprite and destroy after 30 seconds
+            if (!nearbyBoat.IsVisaValid())
+            {
+                successfulIntegrations++;
+                ShowFeedback("CORRECT - Invalid VISA, vessel destroyed", true);
+            }
+            else
+            {
+                failures++;
+                ShowFeedback("FAILURE - Valid VISA, should have cleared", false);
+            }
+
             SpriteRenderer sr = nearbyBoat.GetComponent<SpriteRenderer>();
             if (sr != null && destroyedSprite != null)
                 sr.sprite = destroyedSprite;
 
+            nearbyBoat.isDead = true;
             Destroy(nearbyBoat.gameObject, 30f);
-
-            // Remove BoatData so it cant be interacted with anymore
-            Destroy(nearbyBoat);
             showInfo = false;
             nearbyBoat = null;
         }
 
         if (nearbyBoat == null)
             showInfo = false;
+
+        if (feedbackTimer > 0f)
+            feedbackTimer -= Time.deltaTime;
+    }
+
+    void ShowFeedback(string msg, bool correct)
+    {
+        feedbackMessage = msg;
+        feedbackCorrect = correct;
+        feedbackTimer = 2.5f;
     }
 
     void OnGUI()
     {
+        // Score counter top right
+        GUIStyle scoreStyle = new GUIStyle();
+        scoreStyle.fontSize = 20;
+        scoreStyle.normal.textColor = Color.white;
+        scoreStyle.alignment = TextAnchor.UpperRight;
+
+        GUI.Label(new Rect(Screen.width - 320, 20, 300, 30), $"Successful Integrations: {successfulIntegrations}", scoreStyle);
+
+        scoreStyle.normal.textColor = new Color(1f, 0.4f, 0.4f);
+        GUI.Label(new Rect(Screen.width - 320, 50, 300, 30), $"Failures: {failures}", scoreStyle);
+
+        // Prompt when near a boat
         if (nearbyBoat != null && !showInfo)
         {
             GUIStyle promptStyle = new GUIStyle();
             promptStyle.fontSize = 18;
             promptStyle.normal.textColor = Color.yellow;
             promptStyle.alignment = TextAnchor.MiddleCenter;
-            GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height - 80, 300, 30), "Press I to inspect  |  Press K to destroy", promptStyle);
+            GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height - 80, 400, 30), "I - Inspect  |  H - Clear  |  K - Destroy", promptStyle);
         }
 
+        // Feedback flash
+        if (feedbackTimer > 0f)
+        {
+            GUIStyle fbStyle = new GUIStyle();
+            fbStyle.fontSize = 22;
+            fbStyle.fontStyle = FontStyle.Bold;
+            fbStyle.normal.textColor = feedbackCorrect ? Color.green : new Color(1f, 0.3f, 0.3f);
+            fbStyle.alignment = TextAnchor.MiddleCenter;
+            GUI.Label(new Rect(Screen.width / 2 - 250, Screen.height - 120, 500, 35), feedbackMessage, fbStyle);
+        }
+
+        // Boat info panel
         if (showInfo && nearbyBoat != null)
         {
             GUI.color = new Color(0f, 0f, 0f, 0.75f);
