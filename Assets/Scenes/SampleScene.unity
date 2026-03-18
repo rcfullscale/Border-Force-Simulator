@@ -782,6 +782,7 @@ MonoBehaviour:
   vesselType: 
   cargo: 
   pob: 0
+  visaNumber: 
 --- !u!1 &941724337
 GameObject:
   m_ObjectHideFlags: 0
