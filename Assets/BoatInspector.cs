@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 public class BoatInspector : MonoBehaviour
 {
     public float detectionRange = 5f;
+    public Sprite destroyedSprite; // Assign a sinking/wreck sprite in Inspector
 
     private BoatData nearbyBoat = null;
     private bool showInfo = false;
 
     void Update()
     {
-        // Find the closest boat within range
         nearbyBoat = null;
         float closestDist = detectionRange;
 
@@ -24,7 +24,6 @@ public class BoatInspector : MonoBehaviour
             }
         }
 
-        // Toggle info on I
         if (Keyboard.current.iKey.wasPressedThisFrame)
         {
             if (nearbyBoat != null)
@@ -33,11 +32,17 @@ public class BoatInspector : MonoBehaviour
                 showInfo = false;
         }
 
-        // Dissipate nearest boat on K
         if (Keyboard.current.kKey.wasPressedThisFrame && nearbyBoat != null)
         {
-            BoatDissipate bd = nearbyBoat.GetComponent<BoatDissipate>();
-            if (bd != null) bd.Dissipate();
+            // Swap sprite and destroy after 30 seconds
+            SpriteRenderer sr = nearbyBoat.GetComponent<SpriteRenderer>();
+            if (sr != null && destroyedSprite != null)
+                sr.sprite = destroyedSprite;
+
+            Destroy(nearbyBoat.gameObject, 30f);
+
+            // Remove BoatData so it cant be interacted with anymore
+            Destroy(nearbyBoat);
             showInfo = false;
             nearbyBoat = null;
         }
