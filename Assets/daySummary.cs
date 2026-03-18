@@ -73,13 +73,13 @@ public class DaySummary : MonoBehaviour
         progressStyle.alignment = TextAnchor.MiddleCenter;
         int success = boatInspector != null ? boatInspector.successfulIntegrations : 0;
         int fail = boatInspector != null ? boatInspector.failures : 0;
-        int total = success + fail;
+        int total = success;
         string rating = total == 0 ? "N/A" : $"{Mathf.RoundToInt((float)success / total * 100f)}%";
         string rank = GetRank(total);
         string progress = GetNextRankProgress(total);
         GUI.Label(new Rect(cx - 300, cy - 160, 600, 60), "END OF SHIFT", titleStyle);
         GUI.Label(new Rect(cx - 300, cy - 80, 600, 40), "─────────────────────", bodyStyle);
-        GUI.Label(new Rect(cx - 300, cy - 30, 600, 40), $"Vessels Processed:          {total}", bodyStyle);
+        GUI.Label(new Rect(cx - 300, cy - 30, 600, 40), $"Vessels Processed:          {total + fail}", bodyStyle);
         GUI.Label(new Rect(cx - 300, cy + 20, 600, 40), $"Successful Integrations:  {success}", goodStyle);
         GUI.Label(new Rect(cx - 300, cy + 70, 600, 40), $"Failures:                          {fail}", badStyle);
         GUI.Label(new Rect(cx - 300, cy + 120, 600, 40), $"Accuracy:                        {rating}", bodyStyle);
