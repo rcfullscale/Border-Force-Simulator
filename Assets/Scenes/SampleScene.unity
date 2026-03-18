@@ -498,6 +498,7 @@ GameObject:
   - component: {fileID: 621692193}
   - component: {fileID: 621692192}
   - component: {fileID: 621692195}
+  - component: {fileID: 621692196}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -632,6 +633,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0.106230736, y: 5.0129404e-11}
   m_Size: {x: 9.692392, y: 9.692392}
   m_Direction: 0
+--- !u!114 &621692196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621692191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1a78d38ac59ad6429b3d9eddc448d82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoatInspector
+  detectionRange: 10
 --- !u!1 &803827261
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +657,7 @@ GameObject:
   - component: {fileID: 803827264}
   - component: {fileID: 803827263}
   - component: {fileID: 803827262}
+  - component: {fileID: 803827265}
   m_Layer: 0
   m_Name: Test boat
   m_TagString: Untagged
@@ -751,6 +766,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 1, z: 0}
+--- !u!114 &803827265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803827261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7316f75e109854484cdb1994b26004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoatData
+  vesselName: 
+  vesselType: 
+  cargo: 
+  pob: 0
 --- !u!1 &941724337
 GameObject:
   m_ObjectHideFlags: 0

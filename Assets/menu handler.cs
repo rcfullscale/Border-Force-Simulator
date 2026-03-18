@@ -5,8 +5,10 @@ public class MainMenuManager : MonoBehaviour
 {
     public void PlayGame()
     {
+        Debug.Log("you clicked start");
         // Load the game scene
         SceneManager.LoadScene("SampleScene"); // Use the exact name of your game scene
+        
     }
 
     public void QuitGame()
