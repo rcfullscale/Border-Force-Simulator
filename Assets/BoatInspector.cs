@@ -9,8 +9,8 @@ public class BoatInspector : MonoBehaviour
     private BoatData nearbyBoat = null;
     private bool showInfo = false;
 
-    private int successfulIntegrations = 0;
-    private int failures = 0;
+    public int successfulIntegrations = 0;
+    public int failures = 0;
 
     // Feedback message shown briefly after a decision
     private string feedbackMessage = "";
