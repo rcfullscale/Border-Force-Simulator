@@ -24,6 +24,7 @@ public class BoatInspector : MonoBehaviour
 
         foreach (BoatData boat in FindObjectsByType<BoatData>(FindObjectsSortMode.None))
         {
+            if (boat.hasBeenProcessed) continue;
             float dist = Vector2.Distance(transform.position, boat.transform.position);
             if (dist < closestDist)
             {
@@ -43,6 +44,7 @@ public class BoatInspector : MonoBehaviour
         // H = let through (valid VISA)
         if (Keyboard.current.hKey.wasPressedThisFrame && nearbyBoat != null)
         {
+            nearbyBoat.hasBeenProcessed = true;
             if (nearbyBoat.IsVisaValid())
             {
                 successfulIntegrations++;
@@ -61,6 +63,7 @@ public class BoatInspector : MonoBehaviour
         // K = destroy (invalid VISA)
         if (Keyboard.current.kKey.wasPressedThisFrame && nearbyBoat != null)
         {
+            nearbyBoat.hasBeenProcessed = true;
             if (!nearbyBoat.IsVisaValid())
             {
                 successfulIntegrations++;

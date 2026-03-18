@@ -3,6 +3,7 @@ using UnityEngine;
 public class BoatData : MonoBehaviour
 {
     public bool isDead = false;
+    [HideInInspector] public bool hasBeenProcessed = false;
     [HideInInspector] public string vesselName;
     [HideInInspector] public string vesselType;
     [HideInInspector] public string cargo;
