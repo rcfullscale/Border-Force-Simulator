@@ -5,8 +5,8 @@ public class PlayerStats : MonoBehaviour
     public static PlayerStats Instance { get; private set; }
 
     [Header("Starting Values")]
-    public float startingMoney = 1000f;
-    public float startingReputation = 50f;
+    public float startingMoney = 0f;
+    public float startingReputation = 30f;
 
     [Header("Penalties")]
     public float moneyWrongClear = 500f;

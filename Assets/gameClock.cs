@@ -7,12 +7,15 @@ public class GameClock : MonoBehaviour
 
     private float currentGameHour = 5f;
     private bool isDaytime = true;
+    private int day = 1;
 
     private DaySummary daySummary;
 
     void Start()
     {
         daySummary = FindFirstObjectByType<DaySummary>();
+        if (daySummary == null)
+            Debug.LogWarning("GameClock: No DaySummary script found in scene!");
     }
 
     void Update()
@@ -25,9 +28,7 @@ public class GameClock : MonoBehaviour
         {
             currentGameHour = Mathf.Min(currentGameHour, 17f);
             isDaytime = false;
-
-            if (daySummary != null)
-                daySummary.ShowSummary();
+            daySummary?.ShowSummary();
         }
     }
 
@@ -45,6 +46,8 @@ public class GameClock : MonoBehaviour
         GUIStyle style = new GUIStyle();
         style.fontSize = 20;
         style.normal.textColor = Color.white;
+
         GUI.Label(new Rect(20, 130, 200, 30), $"Time: {display}:{minutes:D2} {ampm}", style);
+        GUI.Label(new Rect(20, 160, 200, 30), $"Day: {day}", style);
     }
 }
