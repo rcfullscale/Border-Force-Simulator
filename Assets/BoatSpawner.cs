@@ -2,11 +2,18 @@ using UnityEngine;
 
 public class BoatSpawner : MonoBehaviour
 {
+    [Header("Normal Boats")]
+    public GameObject[] boatPrefabs;           // Normal boat prefabs
+    public int boatCount = 10;
+
+    [Header("Rare Bad Boat")]
+    public GameObject badBoatPrefab;           // The always-invalid boat prefab
+    [Range(0f, 1f)]
+    public float badBoatChance = 0.15f;        // 15% chance each spawn is a bad boat
+
     [Header("Spawn Settings")]
-    public GameObject[] boatPrefabs;           // Drag in one or more boat prefabs
-    public int boatCount = 10;                 // How many boats to spawn
-    public float spawnRadius = 15f;            // Area around this object to spawn within
-    public float minSpacingBetweenBoats = 2f;  // Minimum gap between spawned boats
+    public float spawnRadius = 15f;
+    public float minSpacingBetweenBoats = 2f;
 
     [Header("Randomize Scale")]
     public bool randomizeScale = true;
@@ -18,7 +25,7 @@ public class BoatSpawner : MonoBehaviour
     public float minSpeed = 1.0f;
     public float maxSpeed = 2.5f;
 
-    private void Start()
+    void Start()
     {
         SpawnBoats();
     }
@@ -32,20 +39,16 @@ public class BoatSpawner : MonoBehaviour
         }
 
         int spawned = 0;
-        int maxAttempts = boatCount * 20; // Safety cap to avoid infinite loop
+        int maxAttempts = boatCount * 20;
         int attempts = 0;
-
-        // Track positions of already-spawned boats to enforce spacing
         Vector2[] spawnedPositions = new Vector2[boatCount];
 
         while (spawned < boatCount && attempts < maxAttempts)
         {
             attempts++;
 
-            // Pick a random point within the spawn radius
             Vector2 randomPoint = (Vector2)transform.position + Random.insideUnitCircle * spawnRadius;
 
-            // Check it's not too close to an already-spawned boat
             bool tooClose = false;
             for (int i = 0; i < spawned; i++)
             {
@@ -58,23 +61,27 @@ public class BoatSpawner : MonoBehaviour
 
             if (tooClose) continue;
 
-            // Pick a random prefab from the array
-            GameObject prefab = boatPrefabs[Random.Range(0, boatPrefabs.Length)];
+            // Decide if this is a bad boat
+            bool isBadBoat = badBoatPrefab != null && Random.value < badBoatChance;
+            GameObject prefab = isBadBoat
+                ? badBoatPrefab
+                : boatPrefabs[Random.Range(0, boatPrefabs.Length)];
 
-            // Spawn with a random rotation
             float randomAngle = Random.Range(0f, 360f);
             Quaternion rotation = Quaternion.Euler(0f, 0f, randomAngle);
             Vector3 spawnPos = new Vector3(randomPoint.x, randomPoint.y, -1f);
             GameObject boat = Instantiate(prefab, spawnPos, rotation, transform);
 
-            // Optionally randomize scale
-            if (randomizeScale)
+            // Mark bad boats as always invalid
+            if (isBadBoat)
             {
-                float scale = 0.5f;
-                    boat.transform.localScale = Vector3.one * scale;
+                BoatData data = boat.GetComponent<BoatData>();
+                if (data != null) data.alwaysDestroy = true;
             }
 
-            // Optionally randomize speed on the movement script
+            if (randomizeScale)
+                boat.transform.localScale = Vector3.one * 0.5f;
+
             if (randomizeSpeed)
             {
                 BoatRandomMovement2D movement = boat.GetComponent<BoatRandomMovement2D>();
@@ -82,13 +89,13 @@ public class BoatSpawner : MonoBehaviour
                     movement.maxSpeed = Random.Range(minSpeed, maxSpeed);
             }
 
-            boat.name = $"Boat_{spawned + 1}";
+            boat.name = isBadBoat ? $"BadBoat_{spawned + 1}" : $"Boat_{spawned + 1}";
             spawnedPositions[spawned] = randomPoint;
             spawned++;
         }
 
         if (spawned < boatCount)
-            Debug.LogWarning($"BoatSpawner: Only managed to spawn {spawned}/{boatCount} boats. Try increasing spawnRadius or decreasing minSpacingBetweenBoats.");
+            Debug.LogWarning($"BoatSpawner: Only spawned {spawned}/{boatCount} boats.");
         else
             Debug.Log($"BoatSpawner: Spawned {spawned} boats.");
     }

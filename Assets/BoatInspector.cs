@@ -12,7 +12,6 @@ public class BoatInspector : MonoBehaviour
     public int successfulIntegrations = 0;
     public int failures = 0;
 
-    // Feedback message shown briefly after a decision
     private string feedbackMessage = "";
     private float feedbackTimer = 0f;
     private bool feedbackCorrect = true;
@@ -24,7 +23,6 @@ public class BoatInspector : MonoBehaviour
 
         foreach (BoatData boat in FindObjectsByType<BoatData>(FindObjectsSortMode.None))
         {
-            if (boat.hasBeenProcessed) continue;
             float dist = Vector2.Distance(transform.position, boat.transform.position);
             if (dist < closestDist)
             {
@@ -41,42 +39,42 @@ public class BoatInspector : MonoBehaviour
                 showInfo = false;
         }
 
-        // H = let through (valid VISA)
+        // H = clear the vessel
         if (Keyboard.current.hKey.wasPressedThisFrame && nearbyBoat != null)
         {
-            nearbyBoat.hasBeenProcessed = true;
-            if (nearbyBoat.IsVisaValid())
+            // Correct if VISA is valid AND it's not a boat that should always be destroyed
+            bool shouldClear = nearbyBoat.IsVisaValid() && !nearbyBoat.alwaysDestroy;
+
+            if (shouldClear)
             {
                 successfulIntegrations++;
-                PlayerStats.Instance?.RecordCorrectClear();
-                ShowFeedback("CORRECT - Valid VISA, vessel cleared", true);
+                ShowFeedback("CORRECT - Vessel cleared", true);
             }
             else
             {
                 failures++;
-                PlayerStats.Instance?.RecordWrongClear();
-                ShowFeedback("FAILURE - Invalid VISA, should have destroyed", false);
+                ShowFeedback("FAILURE - This vessel should have been destroyed", false);
             }
 
             showInfo = false;
             nearbyBoat = null;
         }
 
-        // K = destroy (invalid VISA)
+        // K = destroy the vessel
         if (Keyboard.current.kKey.wasPressedThisFrame && nearbyBoat != null)
         {
-            nearbyBoat.hasBeenProcessed = true;
-            if (!nearbyBoat.IsVisaValid())
+            // Correct if VISA is invalid OR it's a boat that should always be destroyed
+            bool shouldDestroy = !nearbyBoat.IsVisaValid() || nearbyBoat.alwaysDestroy;
+
+            if (shouldDestroy)
             {
                 successfulIntegrations++;
-                PlayerStats.Instance?.RecordCorrectDestroy();
-                ShowFeedback("CORRECT - Invalid VISA, vessel destroyed", true);
+                ShowFeedback("CORRECT - Vessel destroyed", true);
             }
             else
             {
                 failures++;
-                PlayerStats.Instance?.RecordWrongDestroy();
-                ShowFeedback("FAILURE - Valid VISA, should have cleared", false);
+                ShowFeedback("FAILURE - Valid vessel, should have cleared", false);
             }
 
             SpriteRenderer sr = nearbyBoat.GetComponent<SpriteRenderer>();
@@ -105,18 +103,15 @@ public class BoatInspector : MonoBehaviour
 
     void OnGUI()
     {
-        // Score counter top right
         GUIStyle scoreStyle = new GUIStyle();
         scoreStyle.fontSize = 20;
         scoreStyle.normal.textColor = Color.white;
         scoreStyle.alignment = TextAnchor.UpperRight;
 
         GUI.Label(new Rect(Screen.width - 320, 20, 300, 30), $"Successful Integrations: {successfulIntegrations}", scoreStyle);
-
         scoreStyle.normal.textColor = new Color(1f, 0.4f, 0.4f);
         GUI.Label(new Rect(Screen.width - 320, 50, 300, 30), $"Failures: {failures}", scoreStyle);
 
-        // Prompt when near a boat
         if (nearbyBoat != null && !showInfo)
         {
             GUIStyle promptStyle = new GUIStyle();
@@ -126,7 +121,6 @@ public class BoatInspector : MonoBehaviour
             GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height - 80, 400, 30), "I - Inspect  |  H - Clear  |  K - Destroy", promptStyle);
         }
 
-        // Feedback flash
         if (feedbackTimer > 0f)
         {
             GUIStyle fbStyle = new GUIStyle();
@@ -137,7 +131,6 @@ public class BoatInspector : MonoBehaviour
             GUI.Label(new Rect(Screen.width / 2 - 250, Screen.height - 120, 500, 35), feedbackMessage, fbStyle);
         }
 
-        // Boat info panel
         if (showInfo && nearbyBoat != null)
         {
             GUI.color = new Color(0f, 0f, 0f, 0.75f);
