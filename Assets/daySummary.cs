@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+
 public class DaySummary : MonoBehaviour
 {
+    private string endReason = "";
     private bool isShowing = false;
     private BoatInspector boatInspector;
     void Start()
     {
         boatInspector = FindFirstObjectByType<BoatInspector>();
     }
-    public void ShowSummary()
+    public void ShowSummary(string reason = "")
     {
         isShowing = true;
+        endReason = reason;
     }
     void Update()
     {
@@ -77,7 +80,8 @@ public class DaySummary : MonoBehaviour
         string rating = total == 0 ? "N/A" : $"{Mathf.RoundToInt((float)success / total * 100f)}%";
         string rank = GetRank(success);
         string progress = GetNextRankProgress(total);
-        GUI.Label(new Rect(cx - 300, cy - 160, 600, 60), "END OF SHIFT", titleStyle);
+        string title = endReason == "crashed" ? "CRASHED" : "END OF SHIFT";
+        GUI.Label(new Rect(cx - 300, cy - 160, 600, 60), title, titleStyle);
         GUI.Label(new Rect(cx - 300, cy - 80, 600, 40), "─────────────────────", bodyStyle);
         GUI.Label(new Rect(cx - 300, cy - 30, 600, 40), $"Vessels Processed:          {total}", bodyStyle);
         GUI.Label(new Rect(cx - 300, cy + 20, 600, 40), $"Successful Integrations:  {success}", goodStyle);

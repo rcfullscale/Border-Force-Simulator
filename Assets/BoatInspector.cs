@@ -129,7 +129,7 @@ public class BoatInspector : MonoBehaviour
             feedbackTimer -= Time.deltaTime;
     }
 
-    void ShowFeedback(string msg, bool correct)
+    public void ShowFeedback(string msg, bool correct)
     {
         feedbackMessage = msg;
         feedbackCorrect = correct;
