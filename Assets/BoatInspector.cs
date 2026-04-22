@@ -15,6 +15,7 @@ public class BoatInspector : MonoBehaviour
     private string feedbackMessage = "";
     private float feedbackTimer = 0f;
     private bool feedbackCorrect = true;
+    
 
     void Update()
     {
@@ -42,18 +43,34 @@ public class BoatInspector : MonoBehaviour
         // H = clear the vessel
         if (Keyboard.current.hKey.wasPressedThisFrame && nearbyBoat != null)
         {
-            // Correct if VISA is valid AND it's not a boat that should always be destroyed
             bool shouldClear = nearbyBoat.IsVisaValid() && !nearbyBoat.alwaysDestroy;
 
             if (shouldClear)
             {
-                successfulIntegrations++;
-                ShowFeedback("CORRECT - Vessel cleared", true);
+                if (nearbyBoat.alreadycompleted == false)
+                {
+                    successfulIntegrations++;
+                    ShowFeedback("CORRECT - Vessel cleared", true);
+                    nearbyBoat.alreadycompleted = true;
+                }
+                else
+                {
+                    ShowFeedback("ERROR - You have already marked this vessel", false);
+                }
             }
             else
             {
-                failures++;
-                ShowFeedback("FAILURE - This vessel should have been destroyed", false);
+                if (nearbyBoat.alreadycompleted == false)
+                {
+                    failures++;
+                    ShowFeedback("FAILURE - This vessel should have been destroyed", false);
+                    nearbyBoat.alreadycompleted = true;
+                }
+                else
+                {
+                    ShowFeedback("ERROR - You have already marked this vessel", false);
+                }
+                
             }
 
             showInfo = false;
@@ -67,14 +84,32 @@ public class BoatInspector : MonoBehaviour
             bool shouldDestroy = !nearbyBoat.IsVisaValid() || nearbyBoat.alwaysDestroy;
 
             if (shouldDestroy)
-            {
-                successfulIntegrations++;
-                ShowFeedback("CORRECT - Vessel destroyed", true);
+            {   
+                if (nearbyBoat.alreadycompleted == false) 
+                {
+                    successfulIntegrations++;
+                    ShowFeedback("CORRECT - Vessel destroyed", true);
+                    nearbyBoat.alreadycompleted = true;
+                }
+                else
+                {
+                    ShowFeedback("ERROR - You have already marked this vessel", false);
+                }
+
             }
             else
             {
-                failures++;
-                ShowFeedback("FAILURE - Valid vessel, should have cleared", false);
+                if(nearbyBoat.alreadycompleted != false)
+                {
+                    failures++;
+                    ShowFeedback("FAILURE - Valid vessel, should have cleared", false);
+                    nearbyBoat.alreadycompleted = true;
+                }
+                else
+                {
+                    ShowFeedback("ERROR - You have already marked this vessel", false);
+                }
+                
             }
 
             SpriteRenderer sr = nearbyBoat.GetComponent<SpriteRenderer>();

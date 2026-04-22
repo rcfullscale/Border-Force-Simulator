@@ -15,6 +15,7 @@ public class BoatData : MonoBehaviour
 
     public bool alwaysInvalid = false;
     public bool alwaysDestroy = false;
+    public bool alreadycompleted = false;
 
     void Awake()
     {
