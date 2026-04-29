@@ -7,7 +7,8 @@ public class BoatData : MonoBehaviour
     [HideInInspector] public string vesselType;
     [HideInInspector] public string cargo;
     [HideInInspector] public int pob;
-    [HideInInspector] public string visaNumber;
+    //[HideInInspector] 
+    public string visaNumber;
 
     string[] names = { "MV Northern Star", "SS Pacific Trader", "MV Iron Duke", "SS Coral Queen", "MV Blue Horizon", "SS Atlantic Runner", "MV Sea Hawk", "SS Grey Wolf" };
     string[] types = { "Cargo Ship", "Oil Tanker", "Container Vessel", "Bulk Carrier", "Fishing Trawler", "Passenger Ferry", "Research Vessel" };
@@ -29,14 +30,24 @@ public class BoatData : MonoBehaviour
         int sum = d1 + d2;
         string correct = d1.ToString() + d2.ToString() + sum.ToString("D" + (sum >= 10 ? 2 : 1));
 
-        if (alwaysInvalid || Random.Range(0, 10) == 0)
+        if (alwaysInvalid == true)
         {
-            int fakeSum = sum + Random.Range(1, 4);
-            visaNumber = "VIS-" + d1.ToString() + d2.ToString() + fakeSum.ToString("D" + (sum >= 10 ? 2 : 1));
+            visaNumber = "Error";
         }
-        else
+        else if (alwaysDestroy == false) 
         {
-            visaNumber = "VIS-" + correct;
+             d1 = Random.Range(1, 9);
+             d2 = Random.Range(1, 9);
+            if (Random.Range(1, 9) == 0)
+            {
+                int d3 = d1 + d2 + Random.Range(-3, 5);
+                visaNumber = d1.ToString() + d2.ToString() + d3.ToString();
+            }
+            else
+            {
+                int d3 = d1 + d2;
+                visaNumber = d1.ToString() + d2.ToString() + d3.ToString();
+            }
         }
     }
 
