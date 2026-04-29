@@ -38,7 +38,7 @@ public class BoatData : MonoBehaviour
         {
              d1 = Random.Range(1, 9);
              d2 = Random.Range(1, 9);
-            if (Random.Range(1, 2) == 1)
+            if (Random.Range(1, 9) == 1)
             {
                 int d3 = d1 + d2 + Random.Range(-3, 5);
                 visaNumber = d1.ToString() + d2.ToString() + d3.ToString();
