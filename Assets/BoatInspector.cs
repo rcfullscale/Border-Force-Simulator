@@ -52,6 +52,7 @@ public class BoatInspector : MonoBehaviour
                     successfulIntegrations++;
                     ShowFeedback("CORRECT - Vessel cleared", true);
                     nearbyBoat.alreadycompleted = true;
+                    PlayerStats.Instance.RecordCorrectClear();
                 }
                 else
                 {
@@ -65,6 +66,7 @@ public class BoatInspector : MonoBehaviour
                     failures++;
                     ShowFeedback("FAILURE - This vessel should have been destroyed", false);
                     nearbyBoat.alreadycompleted = true;
+                    PlayerStats.Instance.RecordWrongClear();
                 }
                 else
                 {
@@ -90,6 +92,7 @@ public class BoatInspector : MonoBehaviour
                     successfulIntegrations++;
                     ShowFeedback("CORRECT - Vessel destroyed", true);
                     nearbyBoat.alreadycompleted = true;
+                    PlayerStats.Instance.RecordCorrectDestroy();
                 }
                 else
                 {
@@ -104,6 +107,7 @@ public class BoatInspector : MonoBehaviour
                     failures++;
                     ShowFeedback("FAILURE - Valid vessel, should have cleared", false);
                     nearbyBoat.alreadycompleted = true;
+                    PlayerStats.Instance.RecordWrongDestroy();
                 }
                 else
                 {
