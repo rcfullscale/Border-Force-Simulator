@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class BoatSpawner : MonoBehaviour
 {
+    public Collider2D spawnZone;
     [Header("Normal Boats")]
     public GameObject[] boatPrefabs;           // Normal boat prefabs
     public int boatCount = 10;
@@ -32,6 +33,7 @@ public class BoatSpawner : MonoBehaviour
 
     void SpawnBoats()
     {
+        Bounds b = spawnZone.bounds;
         if (boatPrefabs == null || boatPrefabs.Length == 0)
         {
             Debug.LogWarning("BoatSpawner: No boat prefabs assigned!");
@@ -56,6 +58,14 @@ public class BoatSpawner : MonoBehaviour
                 {
                     tooClose = true;
                     break;
+                }
+                if (randomPoint.x < b.min.x || randomPoint.x > b.max.x)
+                {
+                    tooClose = true;
+                }
+                if (randomPoint.y < b.min.y || randomPoint.y > b.max.y)
+                {
+                    tooClose = true;
                 }
             }
 
