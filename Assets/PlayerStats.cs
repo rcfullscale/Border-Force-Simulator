@@ -9,8 +9,8 @@ public class PlayerStats : MonoBehaviour
     public float startingReputation = 30f;
 
     [Header("Penalties")]
-    public float moneyWrongClear = 500f;
-    public float moneyWrongDestroy = 300f;
+    public float moneyWrongClear = 100f;
+    public float moneyWrongDestroy = 250f;
     public float repWrong = 10f;
 
     public float Money { get; private set; }
@@ -47,7 +47,7 @@ public class PlayerStats : MonoBehaviour
     private void RewardCorrect()
     {
         Reputation = Mathf.Clamp(Reputation + 1f, 0f, 100f);
-        Money += Reputation * 0.10f;
+        Money += Reputation;
     }
 
     public void RecordCorrectClear() { RewardCorrect(); }
